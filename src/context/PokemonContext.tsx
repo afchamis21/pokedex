@@ -41,40 +41,10 @@ export function PokemonContextProvider({
   const [isLoading, setIsLoading] = useState(false)
 
   const pageLimit = 9
+
   useEffect(() => {
-    fetchMultiplePokemon(pageLimit)
+    fetchSpecificPage(1)
   }, [])
-
-  async function fetchMultiplePokemon(amount: number) {
-    setIsLoading(true)
-    const response = await axios.get(
-      `https://pokeapi.co/api/v2/pokemon?limit=${amount}`,
-    )
-
-    setApiPaginationURL({
-      next: response.data.next,
-      previous: response.data.previous,
-    })
-
-    const pokemons = await axios.all(
-      response.data.results.map((result: { name: string; url: string }) =>
-        axios.get(result.url),
-      ),
-    )
-
-    setPokemonList(
-      pokemons.map((pokemon: any) => {
-        const types = pokemon.data.types.map((type: any) => type.type.name)
-        return {
-          id: pokemon.data.id,
-          name: pokemon.data.name,
-          sprite: pokemon.data.sprites.front_default,
-          types,
-        }
-      }),
-    )
-    setIsLoading(false)
-  }
 
   async function fetchSpecificPage(targetPage: number, amount = pageLimit) {
     setIsLoading(true)
@@ -112,7 +82,7 @@ export function PokemonContextProvider({
   async function searchPokemon(searchString: string) {
     setIsLoading(true)
     if (searchString.length === 0) {
-      fetchMultiplePokemon(pageLimit)
+      fetchSpecificPage(1)
       return
     }
 
