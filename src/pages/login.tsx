@@ -26,7 +26,7 @@ export default function Login() {
           <h2>You&apos;re already logged in!</h2>
         ) : (
           <>
-            <h3>Login using your Github or Google account</h3>
+            <h3>Login using your Google account</h3>
             <LogInButton onClick={handleGoogleSignIn}>
               <GoogleLogo weight="bold" size={24} /> Login with Google
             </LogInButton>

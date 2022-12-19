@@ -37,13 +37,14 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String         @id @default(cuid())
   name          String?
-  email         String?   @unique
+  email         String?        @unique
   emailVerified DateTime?
   image         String?
   accounts      Account[]
   sessions      Session[]
+  LikedPokemon  LikedPokemon[]
 }
 
 model VerificationToken {
@@ -52,4 +53,13 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model LikedPokemon {
+  relationId String @id @default(cuid())
+  pokemonId  Int
+  userId     String
+  user       User   @relation(fields: [userId], references: [id])
+
+  @@unique([pokemonId, userId])
 }

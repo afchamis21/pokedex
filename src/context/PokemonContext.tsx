@@ -1,5 +1,12 @@
 import axios from 'axios'
-import { createContext, ReactNode, useEffect, useState } from 'react'
+import {
+  createContext,
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useEffect,
+  useState,
+} from 'react'
 
 export interface Pokemon {
   id: number
@@ -18,6 +25,10 @@ interface PokemonContextType {
   pageLimit: number
   apiPaginationURL: apiPaginationURLType
   isLoading: boolean
+  currentPage: number
+  availablePages: number[]
+  setAvailablePages: Dispatch<SetStateAction<number[]>>
+  setCurrentPage: Dispatch<SetStateAction<number>>
   searchPokemon: (searchString: string) => void
   fetchSpecificPage: (targetPage: number, amount?: number) => void
   fetchNextPage: () => void
@@ -37,9 +48,9 @@ export function PokemonContextProvider({
     useState<apiPaginationURLType>({})
 
   const [pokemonList, setPokemonList] = useState<Pokemon[]>([])
-
   const [isLoading, setIsLoading] = useState(false)
-
+  const [currentPage, setCurrentPage] = useState(1)
+  const [availablePages, setAvailablePages] = useState([1, 2, 3, 4, 5])
   const pageLimit = 9
 
   useEffect(() => {
@@ -83,6 +94,8 @@ export function PokemonContextProvider({
     setIsLoading(true)
     if (searchString.length === 0) {
       fetchSpecificPage(1)
+      setCurrentPage(1)
+      setAvailablePages([1, 2, 3, 4, 5])
       return
     }
 
@@ -103,7 +116,6 @@ export function PokemonContextProvider({
       setPokemonList([pokemon])
       setApiPaginationURL({})
     } catch (error) {
-      console.log(error)
       setPokemonList([])
     }
     setIsLoading(false)
@@ -174,6 +186,10 @@ export function PokemonContextProvider({
         pageLimit,
         apiPaginationURL,
         isLoading,
+        availablePages,
+        currentPage,
+        setAvailablePages,
+        setCurrentPage,
         searchPokemon,
         fetchSpecificPage,
         fetchNextPage,

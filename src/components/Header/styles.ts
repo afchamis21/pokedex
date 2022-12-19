@@ -48,3 +48,31 @@ export const LoginButton = styled('a', {
     filter: 'brightness(0.8)',
   },
 })
+
+export const NavContainer = styled('nav', {
+  display: 'flex',
+  gap: '1rem',
+  alignItems: 'center',
+
+  'a:first-child': {
+    position: 'relative',
+
+    '&:before': {
+      content: '',
+      position: 'absolute',
+      width: ' 100%',
+      height: '2px',
+      background: '$red500',
+      bottom: 0,
+      left: 0,
+      transformOrigin: 'right',
+      transform: 'scaleX(0)',
+      transition: 'transform .3s ease-in-out',
+    },
+
+    '&:hover:before': {
+      transform: ' scaleX(1)',
+      transformOrigin: 'left',
+    },
+  },
+})

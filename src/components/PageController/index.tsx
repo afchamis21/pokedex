@@ -1,27 +1,20 @@
 import { CaretLeft, CaretRight } from 'phosphor-react'
-import { useContext, useEffect, useState } from 'react'
+import { useContext } from 'react'
 import { PokemonContext } from '../../context/PokemonContext'
 import { PageControllerContainer, PageIndicator } from './styles'
 
 export function PageController() {
-  const [currentPage, setCurrentPage] = useState(1)
-  const [availablePages, setAvailablePages] = useState([1, 2, 3, 4, 5])
   const {
     apiPaginationURL,
     fetchNextPage,
     fetchPreviousPage,
     fetchSpecificPage,
     pokemonList,
+    availablePages,
+    currentPage,
+    setAvailablePages,
+    setCurrentPage,
   } = useContext(PokemonContext)
-
-  useEffect(() => {
-    if (pokemonList.length === 1) {
-      setCurrentPage(1)
-      setAvailablePages([1])
-    } else {
-      setAvailablePages([1, 2, 3, 4, 5])
-    }
-  }, [pokemonList.length])
 
   function handleDecreasePage() {
     if (currentPage - 1 === availablePages[0] && currentPage - 1 !== 1) {
@@ -55,6 +48,22 @@ export function PageController() {
     if (targetPage === availablePages[0] && targetPage !== 1) {
       setAvailablePages((state) => state.map((page) => page - 1))
     }
+  }
+
+  if (pokemonList.length === 0) {
+    return (
+      <PageIndicator key={1} active={false} disabled>
+        1
+      </PageIndicator>
+    )
+  }
+
+  if (pokemonList.length === 1) {
+    return (
+      <PageIndicator key={1} active={true}>
+        1
+      </PageIndicator>
+    )
   }
 
   return (

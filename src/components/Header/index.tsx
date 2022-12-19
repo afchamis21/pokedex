@@ -1,6 +1,12 @@
 import Link from 'next/link'
 import { useSession, signOut } from 'next-auth/react'
-import { HeaderContainer, HeaderItems, LoginButton, Logo } from './styles'
+import {
+  HeaderContainer,
+  HeaderItems,
+  LoginButton,
+  Logo,
+  NavContainer,
+} from './styles'
 
 export function Header() {
   const { data: session } = useSession()
@@ -18,9 +24,10 @@ export function Header() {
           </Logo>
         </Link>
         {session ? (
-          <>
+          <NavContainer>
+            <Link href={`/profile/${session.user?.id}`}>My profile</Link>
             <LoginButton onClick={handleSignOut}>Logout</LoginButton>
-          </>
+          </NavContainer>
         ) : (
           <LoginButton href={'/login'}>Login</LoginButton>
         )}

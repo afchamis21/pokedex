@@ -20,7 +20,7 @@ export const PageIndicator = styled('button', {
   width: '2.5rem',
   height: '2.5rem',
 
-  '&:hover': {
+  '&:not(:disabled):hover': {
     cursor: 'pointer',
     background: '$red400',
     borderColor: 'transparent',
