@@ -1,21 +1,28 @@
-import axios from 'axios'
 import { GetServerSideProps } from 'next'
 import { unstable_getServerSession as unstableGetServerSession } from 'next-auth'
+import { useSession } from 'next-auth/react'
 import Head from 'next/head'
-import Image from 'next/image'
-import { User } from 'phosphor-react'
+import PokeAPI from 'pokedex-promise-v2'
+import { useCallback, useEffect, useState } from 'react'
+import { FriendsList } from '../../components/FriendsList'
 import { PokemonList } from '../../components/PokemonList'
+import { UserCard } from '../../components/UserCard'
+import { UserList } from '../../components/UserList'
 import { Pokemon } from '../../context/PokemonContext'
 import { api } from '../../lib/axios'
-import { ProfileContainer, UserInfoContainer } from '../../styles/pages/Profile'
+import { pokedex } from '../../lib/pokedex'
+import {
+  ProfileContainer,
+  SocialSectionContainer,
+} from '../../styles/pages/Profile'
 import { getUserInformation } from '../../utils/get-user-information'
 import { IsLoggedInUser } from '../../utils/is-logged-in-user'
 import { authOptions } from '../api/auth/[...nextauth]'
 
-interface UserInformationType {
+export interface UserInformationType {
   name?: string
   image?: string
-  id?: string
+  id: string
 }
 
 interface ProfileProps {
@@ -24,28 +31,148 @@ interface ProfileProps {
   userInformation: UserInformationType
 }
 
+interface RemoveFriendRequestArgs {
+  userId: string
+  friendId: string
+}
+
+interface AddFriendRequestArgs {
+  userId: string
+  newFriendId: string
+}
+
 export default function Profile({
   likedPokemonList,
   isLoggedInUser,
   userInformation,
 }: ProfileProps) {
-  // Aba de amigos (?)
+  const { data: session } = useSession()
+  const [isUpdating, setIsUpdating] = useState(false)
+  const [isFriend, setIsFriend] = useState(false)
+  const [userList, setUserList] = useState<UserInformationType[]>([])
+  const [friendsList, setFriendsList] = useState<UserInformationType[]>([])
+
+  useEffect(() => {
+    async function fetchIsFriend(): Promise<void> {
+      if (isLoggedInUser) {
+        setIsFriend(false)
+        return
+      }
+
+      const response = await api.get('/api/user/friends', {
+        params: {
+          userId: userInformation.id,
+          targetPage: 1,
+          paginationSize: 6,
+        },
+      })
+
+      const friendsList: UserInformationType[] = response.data.friendsList
+
+      const isLoggedInUserOnFriendsList = !!friendsList.find(
+        (user) => user.id === session?.user?.id,
+      )
+
+      setIsFriend(isLoggedInUserOnFriendsList)
+    }
+
+    fetchIsFriend()
+  }, [isLoggedInUser, session?.user?.id, userInformation.id])
+
+  async function handleRemoveFriend({
+    userId,
+    friendId,
+  }: RemoveFriendRequestArgs) {
+    setIsUpdating(true)
+
+    await api.delete('/api/user/friends', {
+      data: {
+        userId,
+        friendId,
+      },
+    })
+
+    setIsUpdating(false)
+
+    const deletedFriend = friendsList?.find((friend) => friend.id === friendId)
+    console.log(deletedFriend)
+    if (deletedFriend) {
+      setFriendsList((state) =>
+        state?.filter((friend) => friend.id !== deletedFriend?.id),
+      )
+      setUserList((state) => [...state, deletedFriend])
+    }
+  }
+
+  async function handleAddFriend({
+    userId,
+    newFriendId,
+  }: AddFriendRequestArgs) {
+    setIsUpdating(true)
+
+    await api.post('/api/user/friends', {
+      data: {
+        userId,
+        newFriendId,
+      },
+    })
+
+    setIsUpdating(false)
+
+    const addedFriend = userList?.find((user) => user.id === newFriendId)
+    console.log(addedFriend)
+    if (addedFriend) {
+      setFriendsList((state) => [...state, addedFriend])
+      setUserList((state) =>
+        state?.filter((friend) => friend.id !== addedFriend?.id),
+      )
+    }
+  }
+
+  const handleSetUserList = useCallback((newUserList: any) => {
+    setUserList(newUserList)
+  }, [])
+
+  const handleSetFriendsList = useCallback((newFriendsList: any) => {
+    setFriendsList(newFriendsList)
+  }, [])
 
   return (
     <ProfileContainer>
       <Head>
-        <title>Pokedex | {userInformation.name}</title>
+        <title>Pokedex | Profile</title>
         <meta property="og:title" content="My page title" key="title" />
       </Head>
-      <UserInfoContainer>
-        {userInformation?.image ? (
-          <Image alt="" src={userInformation.image} width={100} height={100} />
-        ) : (
-          <User size={100} />
+      <SocialSectionContainer>
+        <UserCard
+          userInfo={userInformation}
+          isLoggedInUser={isLoggedInUser}
+          isFriend={isFriend}
+          isUpdating={isUpdating}
+          handleAddFriend={() => {
+            handleAddFriend({
+              newFriendId: userInformation.id,
+              userId: session?.user?.id!,
+            })
+          }}
+        />
+        {isLoggedInUser && (
+          <UserList
+            isUpdating={isUpdating}
+            userId={userInformation.id}
+            userList={userList}
+            handleAddFriend={handleAddFriend}
+            handleSetUserList={handleSetUserList}
+          />
         )}
-
-        <h2>{userInformation?.name ?? 'User not found'}</h2>
-      </UserInfoContainer>
+      </SocialSectionContainer>
+      <FriendsList
+        isUpdating={isUpdating}
+        userInfo={userInformation}
+        friendsList={friendsList}
+        handleRemoveFriend={handleRemoveFriend}
+        handleSetFriendsList={handleSetFriendsList}
+      />
       <PokemonList pokemonList={likedPokemonList} />
     </ProfileContainer>
   )
@@ -58,6 +185,17 @@ export const getServerSideProps: GetServerSideProps<ProfileProps> = async ({
 }) => {
   // User Data:
   const session = await unstableGetServerSession(req, res, authOptions)
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+      props: {},
+    }
+  }
+
   const { id: userId } = query
   const isLoggedInUser = IsLoggedInUser({
     sessionId: session?.user?.id,
@@ -71,7 +209,6 @@ export const getServerSideProps: GetServerSideProps<ProfileProps> = async ({
         id: session?.user?.id!,
       }
     : await getUserInformation(userId)
-
   // Pokemon Data:
   const response = await api.get('api/pokemon', {
     params: {
@@ -79,25 +216,23 @@ export const getServerSideProps: GetServerSideProps<ProfileProps> = async ({
     },
   })
 
-  const likedPokemonIds: Number[] = response.data.likedPokemon
+  const likedPokemonIds: number[] = response.data.likedPokemon
 
-  const likedPokemonResponse = await axios.all(
-    likedPokemonIds.map((pokemonId) => {
-      return axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`)
-    }),
-  )
+  const pokeList = (await pokedex.getPokemonByName(
+    likedPokemonIds,
+  )) as PokeAPI.Pokemon[]
 
-  const likedPokemonList = likedPokemonResponse.map((response) => {
-    const types = response.data.types.map((type: any) => type.type.name)
+  const likedPokemonList: Pokemon[] = pokeList.map((pokemon) => {
+    const types = pokemon.types.map((type) => type.type.name)
 
-    const pokemon: Pokemon = {
-      id: response.data.id,
-      name: response.data.name,
-      sprite: response.data.sprites.front_default,
+    const formattedPokemon: Pokemon = {
+      id: pokemon.id,
+      name: pokemon.name,
+      sprite: pokemon.sprites.front_default!,
       types,
     }
 
-    return pokemon
+    return formattedPokemon
   })
 
   return {

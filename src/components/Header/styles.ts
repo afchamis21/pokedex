@@ -20,10 +20,13 @@ export const HeaderItems = styled('div', {
 
 export const Logo = styled('h1', {
   fontWeight: 'bold',
-  fontSize: '$2xl',
+  fontSize: '1.5rem',
+  pointerEvents: 'none',
+  filter: 'brightness(0.9)',
 
   strong: {
     color: '$red500',
+    textDecoration: 'underline',
   },
 })
 

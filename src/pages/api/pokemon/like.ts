@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '../../../lib/prisma'
 
-export default async function getUserId(
+export default async function likePokemon(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
@@ -11,7 +11,6 @@ export default async function getUserId(
 
   const body = req.body.data
   const { userId, pokemonId } = body
-  console.log(body)
 
   if (!userId) {
     return res.status(400).json({ message: 'Invalid userId' })

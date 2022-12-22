@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '../../../lib/prisma'
 
-export default async function getUserId(
+export default async function dislikePokemon(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {

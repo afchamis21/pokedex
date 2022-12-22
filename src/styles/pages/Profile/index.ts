@@ -9,14 +9,16 @@ export const ProfileContainer = styled('div', {
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'flex-start',
-  gap: '1.5rem',
+  flexWrap: 'wrap',
+  gap: '3rem',
 })
 
-export const UserInfoContainer = styled('header', {
-  background: '$gray800',
+export const SocialSectionContainer = styled('div', {
   display: 'flex',
-  gap: '1rem',
+  flexDirection: 'column',
+  gap: '2rem',
+  flex: 1,
   alignItems: 'center',
-  padding: '0.5rem 1rem',
-  boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
+  maxWidth: '20rem',
+  margin: '0 auto',
 })

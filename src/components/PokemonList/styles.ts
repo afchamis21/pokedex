@@ -4,11 +4,21 @@ export const PokemonListContainer = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   gap: '1rem',
+  flex: 1,
+  alignItems: 'center',
+
+  h3: {
+    paddingBottom: '0.2rem',
+    borderBottom: '2px solid $red500',
+  },
+
+  p: {
+    textAlign: 'center',
+  },
 })
 
 export const Card = styled('div', {
-  maxWidth: '20rem',
-  width: '100%',
+  width: '20rem',
   padding: '1rem',
   background: '$gray800',
   boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',

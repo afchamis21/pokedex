@@ -27,7 +27,10 @@ export function PokemonList({ pokemonList }: PokemonListProps) {
 
   return (
     <PokemonListContainer>
-      <h2>My Favorite Pokemon:</h2>
+      <h3>My Favorite Pokemon:</h3>
+      {pokemonList.length === 0 && (
+        <p>Your liked pokemon will be shown here!</p>
+      )}
       {pokemonList.map((pokemon) => (
         <Card key={pokemon.id}>
           <Image src={pokemon.sprite} width={100} height={100} alt="" />

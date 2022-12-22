@@ -1,4 +1,5 @@
 import axios from 'axios'
+import PokeAPI from 'pokedex-promise-v2'
 import {
   createContext,
   Dispatch,
@@ -7,6 +8,7 @@ import {
   useEffect,
   useState,
 } from 'react'
+import { pokedex } from '../lib/pokedex'
 
 export interface Pokemon {
   id: number
@@ -59,32 +61,46 @@ export function PokemonContextProvider({
 
   async function fetchSpecificPage(targetPage: number, amount = pageLimit) {
     setIsLoading(true)
-    const response = await axios.get(
-      `https://pokeapi.co/api/v2/pokemon?offset=${
-        amount * (targetPage - 1)
-      }&limit=${amount}`,
+    // const response = await axios.get(
+    //   `https://pokeapi.co/api/v2/pokemon?offset=${
+    //     amount * (targetPage - 1)
+    //   }&limit=${amount}`,
+    // )
+
+    // console.log(response.data)
+
+    // setApiPaginationURL({
+    //   next: response.data.next,
+    //   previous: response.data.previous,
+    // })
+
+    // const pokemons = await axios.all(
+    //   response.data.results.map((result: { name: string; url: string }) =>
+    //     axios.get(result.url),
+    //   ),
+    // )
+
+    const idList = [...Array(amount)].map(
+      (_, index) => index + 1 + amount * (targetPage - 1),
     )
 
-    setApiPaginationURL({
-      next: response.data.next,
-      previous: response.data.previous,
-    })
+    console.log(idList)
 
-    const pokemons = await axios.all(
-      response.data.results.map((result: { name: string; url: string }) =>
-        axios.get(result.url),
-      ),
-    )
+    const pokemons = (await pokedex.getPokemonByName(
+      idList,
+    )) as PokeAPI.Pokemon[]
 
     setPokemonList(
-      pokemons.map((pokemon: any) => {
-        const types = pokemon.data.types.map((type: any) => type.type.name)
-        return {
-          id: pokemon.data.id,
-          name: pokemon.data.name,
-          sprite: pokemon.data.sprites.front_default,
+      pokemons.map((pokemon) => {
+        const types = pokemon.types.map((type) => type.type.name)
+        const formattedPokemon = {
+          id: pokemon.id,
+          name: pokemon.name,
+          sprite: pokemon.sprites.front_default!,
           types,
         }
+
+        return formattedPokemon
       }),
     )
     setIsLoading(false)

@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '../../../lib/prisma'
 
-export default async function getUserId(
+export default async function getAllLikePokemon(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
@@ -28,5 +28,5 @@ export default async function getUserId(
     (pokemonUserPair) => pokemonUserPair.pokemonId,
   )
 
-  return res.status(201).json({ likedPokemon })
+  return res.status(200).json({ likedPokemon })
 }
