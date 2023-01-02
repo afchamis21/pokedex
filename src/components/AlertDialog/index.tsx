@@ -1,14 +1,8 @@
 import * as AlertDialog from '@radix-ui/react-alert-dialog'
-import { useRouter } from 'next/router'
+import Link from 'next/link'
 import { Overlay, Content, ButtonsContainer, Cancel, Action } from './styles'
 
 export function MustBeLoggedInDialog() {
-  const router = useRouter()
-
-  function handleGoToLogin() {
-    router.push('/login')
-  }
-
   return (
     <AlertDialog.Portal>
       <Overlay />
@@ -16,7 +10,9 @@ export function MustBeLoggedInDialog() {
         <AlertDialog.Title>Must be logged in to like pokemon</AlertDialog.Title>
         <ButtonsContainer>
           <Cancel>Cancel</Cancel>
-          <Action onClick={handleGoToLogin}>Go to Login</Action>
+          <Action asChild>
+            <Link href={'/login'}>Go to Login</Link>
+          </Action>
         </ButtonsContainer>
       </Content>
     </AlertDialog.Portal>

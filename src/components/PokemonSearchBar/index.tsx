@@ -10,7 +10,7 @@ export function PokemonSearchBar() {
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
-    searchPokemon(inputContent.replaceAll(' ', '-'))
+    searchPokemon(inputContent.trim().replaceAll(' ', '-'))
   }
 
   return (

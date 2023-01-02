@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Pokemon } from '../../context/PokemonContext'
 import { api } from '../../lib/axios'
 import { LikeButton } from '../LikeButton'
-import { PokemonCardContainer, TypeList } from './styles'
+import { PokemonCardContainer, PokemonInfo, TypeList } from './styles'
 
 interface PokemonCardProps {
   pokemon: Pokemon
@@ -67,7 +67,12 @@ export function PokemonCard({
         }
       />
       <Image src={pokemon.sprite} width={100} height={100} alt="" />
-      <p>{capitalize(name)}</p>
+      <PokemonInfo>
+        <p>
+          <strong>ID:</strong> {pokemon.id}
+        </p>
+        |<p>{capitalize(name)}</p>
+      </PokemonInfo>
       <TypeList>
         {pokemon.types.map((type, i) => (
           <li key={i}>{capitalize(type)}</li>

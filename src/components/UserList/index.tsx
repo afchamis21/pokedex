@@ -92,6 +92,7 @@ export function UserList({
                 <UserCard
                   userInfo={user}
                   isLoggedInUser={false}
+                  showActionButtons={true}
                   isFriend={false}
                   isUpdating={isUpdating}
                   handleAddFriend={() => {
