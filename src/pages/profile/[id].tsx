@@ -26,6 +26,7 @@ export interface UserInformationType {
 }
 
 interface ProfileProps {
+  testList?: number[]
   likedPokemonList?: Pokemon[]
   isLoggedInUser: boolean
   userInformation: UserInformationType
@@ -42,6 +43,7 @@ interface AddFriendRequestArgs {
 }
 
 export default function Profile({
+  testList,
   likedPokemonList,
   isLoggedInUser,
   userInformation,
@@ -144,6 +146,9 @@ export default function Profile({
         <meta property="og:title" content="My page title" key="title" />
       </Head>
       <SocialSectionContainer>
+        {testList?.map((num, i) => (
+          <p key={i}>num</p>
+        ))}
         <UserCard
           userInfo={userInformation}
           isLoggedInUser={isLoggedInUser}
@@ -214,17 +219,23 @@ export const getServerSideProps: GetServerSideProps<ProfileProps> = async ({
 
   // Pokemon Data:
   try {
+    var testList = []
+    testList.push(0)
     const response = await api.get('api/pokemon', {
       params: {
         userId,
       },
     })
+    testList.push(1)
 
     const likedPokemonIds: number[] = response.data.likedPokemon
+    testList.push(2)
 
     const pokeList = (await pokedex.getPokemonByName(
       likedPokemonIds,
     )) as PokeAPI.Pokemon[]
+
+    testList.push(3)
 
     const likedPokemonList: Pokemon[] = pokeList.map((pokemon) => {
       const types = pokemon.types.map((type) => type.type.name)
@@ -236,6 +247,8 @@ export const getServerSideProps: GetServerSideProps<ProfileProps> = async ({
         types,
       }
 
+      testList.push(4)
+
       return formattedPokemon
     })
 
@@ -244,7 +257,7 @@ export const getServerSideProps: GetServerSideProps<ProfileProps> = async ({
     }
   } catch (error) {
     return {
-      props: { isLoggedInUser, userInformation },
+      props: { testList, isLoggedInUser, userInformation },
     }
   }
 }
