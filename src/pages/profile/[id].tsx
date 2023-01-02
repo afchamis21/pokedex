@@ -147,8 +147,9 @@ export default function Profile({
       </Head>
       <SocialSectionContainer>
         {testList?.map((num, i) => (
-          <p key={i}>num</p>
+          <p key={i}>{num}</p>
         ))}
+        <p>{userInformation.id}</p>
         <UserCard
           userInfo={userInformation}
           isLoggedInUser={isLoggedInUser}
@@ -226,6 +227,7 @@ export const getServerSideProps: GetServerSideProps<ProfileProps> = async ({
         userId,
       },
     })
+    alert(response.data)
     testList.push(1)
 
     const likedPokemonIds: number[] = response.data.likedPokemon
@@ -256,6 +258,8 @@ export const getServerSideProps: GetServerSideProps<ProfileProps> = async ({
       props: { likedPokemonList, isLoggedInUser, userInformation },
     }
   } catch (error) {
+    alert(error)
+
     return {
       props: { testList, isLoggedInUser, userInformation },
     }
