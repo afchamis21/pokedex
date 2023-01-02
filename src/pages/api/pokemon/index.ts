@@ -9,7 +9,7 @@ export default async function getAllLikePokemon(
     return res.status(405).json({ error: 'Method Not Allowed' })
   }
 
-  const query = req.query
+  const query = req.body
   const { userId } = query as Partial<{
     [key: string]: string
   }>

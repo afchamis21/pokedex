@@ -223,7 +223,7 @@ export const getServerSideProps: GetServerSideProps<ProfileProps> = async ({
     var testList = []
     testList.push(0)
     const response = await api.get('api/pokemon', {
-      params: {
+      data: {
         userId,
       },
     })
