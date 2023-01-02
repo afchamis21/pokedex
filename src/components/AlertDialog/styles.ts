@@ -59,4 +59,9 @@ export const Action = styled(AlertDialog.Action, {
     border: '2px solid $gray100',
     transition: 'all 0.2s',
   },
+
+  '&:focus': {
+    outline: '1px solid #fff',
+    border: '2px solid #000',
+  },
 })

@@ -147,6 +147,7 @@ export default function Profile({
         <UserCard
           userInfo={userInformation}
           isLoggedInUser={isLoggedInUser}
+          showActionButtons={false}
           isFriend={isFriend}
           isUpdating={isUpdating}
           handleAddFriend={() => {
@@ -167,6 +168,7 @@ export default function Profile({
         )}
       </SocialSectionContainer>
       <FriendsList
+        isLoggedInUser={isLoggedInUser}
         isUpdating={isUpdating}
         userInfo={userInformation}
         friendsList={friendsList}
@@ -209,6 +211,7 @@ export const getServerSideProps: GetServerSideProps<ProfileProps> = async ({
         id: session?.user?.id!,
       }
     : await getUserInformation(userId)
+
   // Pokemon Data:
   const response = await api.get('api/pokemon', {
     params: {

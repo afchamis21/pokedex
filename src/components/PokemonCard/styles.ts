@@ -34,3 +34,13 @@ export const TypeList = styled('ul', {
       '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
   },
 })
+
+export const PokemonInfo = styled('div', {
+  display: 'flex',
+  gap: '0.5rem',
+
+  strong: {
+    fontWeight: 'normal',
+    color: '$red400',
+  },
+})

@@ -5,7 +5,6 @@ import { PageControllerContainer, PageIndicator } from './styles'
 
 export function PageController() {
   const {
-    apiPaginationURL,
     fetchNextPage,
     fetchPreviousPage,
     fetchSpecificPage,
@@ -22,16 +21,14 @@ export function PageController() {
     }
 
     fetchPreviousPage()
-    setCurrentPage((state) => state - 1)
   }
 
   function handleIncreasePage() {
-    if (currentPage + 1 === availablePages[availablePages.length - 1]) {
+    if (currentPage + 1 === availablePages.at(-1)) {
       setAvailablePages((state) => state.map((page) => page + 1))
     }
 
     fetchNextPage()
-    setCurrentPage((state) => state + 1)
   }
 
   function handleSelectPage(targetPage: number) {
@@ -41,7 +38,7 @@ export function PageController() {
     fetchSpecificPage(targetPage)
     setCurrentPage(targetPage)
 
-    if (targetPage === availablePages[availablePages.length - 1]) {
+    if (targetPage === availablePages.at(-1)) {
       setAvailablePages((state) => state.map((page) => page + 1))
     }
 
@@ -68,7 +65,7 @@ export function PageController() {
 
   return (
     <PageControllerContainer>
-      {apiPaginationURL.previous && (
+      {currentPage !== 1 && (
         <CaretLeft size={32} onClick={handleDecreasePage} />
       )}
       {availablePages.map((page) => {
@@ -82,9 +79,7 @@ export function PageController() {
           </PageIndicator>
         )
       })}
-      {apiPaginationURL.next && (
-        <CaretRight size={32} onClick={handleIncreasePage} />
-      )}
+      <CaretRight size={32} onClick={handleIncreasePage} />
     </PageControllerContainer>
   )
 }

@@ -14,6 +14,7 @@ import {
 
 interface FriendsListProps {
   userInfo: UserInformationType
+  isLoggedInUser: boolean
   friendsList: UserInformationType[]
   isUpdating: boolean
   handleSetFriendsList: (newFriendsList: any) => void
@@ -27,6 +28,7 @@ export function FriendsList({
   userInfo,
   friendsList,
   isUpdating,
+  isLoggedInUser,
   handleSetFriendsList,
   handleRemoveFriend,
 }: FriendsListProps) {
@@ -89,6 +91,7 @@ export function FriendsList({
                   isUpdating={isUpdating}
                   userInfo={friend}
                   isLoggedInUser={false}
+                  showActionButtons={isLoggedInUser}
                   isFriend={true}
                   handleRemoveFriend={() => {
                     handleRemoveFriend({
