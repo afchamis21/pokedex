@@ -227,7 +227,6 @@ export const getServerSideProps: GetServerSideProps<ProfileProps> = async ({
         userId,
       },
     })
-    alert(response.data)
     testList.push(1)
 
     const likedPokemonIds: number[] = response.data.likedPokemon
@@ -258,8 +257,6 @@ export const getServerSideProps: GetServerSideProps<ProfileProps> = async ({
       props: { likedPokemonList, isLoggedInUser, userInformation },
     }
   } catch (error) {
-    alert(error)
-
     return {
       props: { testList, isLoggedInUser, userInformation },
     }
