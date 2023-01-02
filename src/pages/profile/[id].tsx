@@ -2,15 +2,12 @@ import { GetServerSideProps } from 'next'
 import { unstable_getServerSession as unstableGetServerSession } from 'next-auth'
 import { useSession } from 'next-auth/react'
 import Head from 'next/head'
-import PokeAPI from 'pokedex-promise-v2'
 import { useCallback, useEffect, useState } from 'react'
 import { FriendsList } from '../../components/FriendsList'
-import { PokemonList } from '../../components/PokemonList'
 import { UserCard } from '../../components/UserCard'
 import { UserList } from '../../components/UserList'
 import { Pokemon } from '../../context/PokemonContext'
 import { api } from '../../lib/axios'
-import { pokedex } from '../../lib/pokedex'
 import {
   ProfileContainer,
   SocialSectionContainer,
@@ -26,7 +23,7 @@ export interface UserInformationType {
 }
 
 interface ProfileProps {
-  likedPokemonList: Pokemon[]
+  likedPokemonList?: Pokemon[]
   isLoggedInUser: boolean
   userInformation: UserInformationType
 }
@@ -42,7 +39,6 @@ interface AddFriendRequestArgs {
 }
 
 export default function Profile({
-  likedPokemonList,
   isLoggedInUser,
   userInformation,
 }: ProfileProps) {
@@ -175,7 +171,7 @@ export default function Profile({
         handleRemoveFriend={handleRemoveFriend}
         handleSetFriendsList={handleSetFriendsList}
       />
-      <PokemonList pokemonList={likedPokemonList} />
+      {/* <PokemonList pokemonList={likedPokemonList} /> */}
     </ProfileContainer>
   )
 }
@@ -212,33 +208,33 @@ export const getServerSideProps: GetServerSideProps<ProfileProps> = async ({
       }
     : await getUserInformation(userId)
 
-  // Pokemon Data:
-  const response = await api.get('api/pokemon', {
-    params: {
-      userId,
-    },
-  })
+  // // Pokemon Data:
+  // const response = await api.get('api/pokemon', {
+  //   params: {
+  //     userId,
+  //   },
+  // })
 
-  const likedPokemonIds: number[] = response.data.likedPokemon
+  // const likedPokemonIds: number[] = response.data.likedPokemon
 
-  const pokeList = (await pokedex.getPokemonByName(
-    likedPokemonIds,
-  )) as PokeAPI.Pokemon[]
+  // const pokeList = (await pokedex.getPokemonByName(
+  //   likedPokemonIds,
+  // )) as PokeAPI.Pokemon[]
 
-  const likedPokemonList: Pokemon[] = pokeList.map((pokemon) => {
-    const types = pokemon.types.map((type) => type.type.name)
+  // const likedPokemonList: Pokemon[] = pokeList.map((pokemon) => {
+  //   const types = pokemon.types.map((type) => type.type.name)
 
-    const formattedPokemon: Pokemon = {
-      id: pokemon.id,
-      name: pokemon.name,
-      sprite: pokemon.sprites.front_default!,
-      types,
-    }
+  //   const formattedPokemon: Pokemon = {
+  //     id: pokemon.id,
+  //     name: pokemon.name,
+  //     sprite: pokemon.sprites.front_default!,
+  //     types,
+  //   }
 
-    return formattedPokemon
-  })
+  //   return formattedPokemon
+  // })
 
   return {
-    props: { likedPokemonList, isLoggedInUser, userInformation },
+    props: { isLoggedInUser, userInformation },
   }
 }
