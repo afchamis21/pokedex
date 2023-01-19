@@ -1,7 +1,8 @@
 import { useSession, signIn } from 'next-auth/react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { GithubLogo, GoogleLogo } from 'phosphor-react'
+import { GoogleLogo } from 'phosphor-react'
+import { useEffect } from 'react'
 import {
   LogInButton,
   LoginContainer,
@@ -16,13 +17,11 @@ export default function Login() {
     signIn('google')
   }
 
-  function handleGithubSignIn() {
-    signIn('github')
-  }
-
-  if (session) {
-    router.push('/')
-  }
+  useEffect(() => {
+    if (session) {
+      router.push('/')
+    }
+  }, [router, session])
 
   return (
     <LoginContainer>
@@ -39,14 +38,9 @@ export default function Login() {
             <LogInButton onClick={handleGoogleSignIn}>
               <GoogleLogo weight="bold" size={24} /> Login with Google
             </LogInButton>
-            <LogInButton onClick={handleGithubSignIn}>
-              <GithubLogo weight="bold" size={24} /> Login with Github
-            </LogInButton>
           </>
         )}
       </LoginMenu>
     </LoginContainer>
   )
 }
-
-// <LoginButton onClick={handleSignIn}>Login</LoginButton>
