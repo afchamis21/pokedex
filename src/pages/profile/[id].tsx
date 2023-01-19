@@ -95,7 +95,7 @@ export default function Profile({
     setIsUpdating(false)
 
     const deletedFriend = friendsList?.find((friend) => friend.id === friendId)
-    console.log(deletedFriend)
+
     if (deletedFriend) {
       setFriendsList((state) =>
         state?.filter((friend) => friend.id !== deletedFriend?.id),
@@ -120,7 +120,7 @@ export default function Profile({
     setIsUpdating(false)
 
     const addedFriend = userList?.find((user) => user.id === newFriendId)
-    console.log(addedFriend)
+
     if (addedFriend) {
       setFriendsList((state) => [...state, addedFriend])
       setUserList((state) =>
