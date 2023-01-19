@@ -65,9 +65,9 @@ export function PageController() {
 
   return (
     <PageControllerContainer>
-      {currentPage !== 1 && (
-        <CaretLeft size={32} onClick={handleDecreasePage} />
-      )}
+      <button disabled={currentPage === 1} onClick={handleDecreasePage}>
+        <CaretLeft size={32} />
+      </button>
       {availablePages.map((page) => {
         return (
           <PageIndicator
@@ -79,7 +79,9 @@ export function PageController() {
           </PageIndicator>
         )
       })}
-      <CaretRight size={32} onClick={handleIncreasePage} />
+      <button>
+        <CaretRight size={32} onClick={handleIncreasePage} />
+      </button>
     </PageControllerContainer>
   )
 }
