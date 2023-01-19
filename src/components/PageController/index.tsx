@@ -79,8 +79,8 @@ export function PageController() {
           </PageIndicator>
         )
       })}
-      <button>
-        <CaretRight size={32} onClick={handleIncreasePage} />
+      <button disabled={currentPage >= 99} onClick={handleIncreasePage}>
+        <CaretRight size={32} />
       </button>
     </PageControllerContainer>
   )
