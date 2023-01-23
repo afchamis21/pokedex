@@ -38,7 +38,7 @@ export function PageController() {
     fetchSpecificPage(targetPage)
     setCurrentPage(targetPage)
 
-    if (targetPage === availablePages.at(-1)) {
+    if (targetPage === availablePages.at(-1) && targetPage !== 100) {
       setAvailablePages((state) => state.map((page) => page + 1))
     }
 
@@ -79,7 +79,7 @@ export function PageController() {
           </PageIndicator>
         )
       })}
-      <button disabled={currentPage >= 99} onClick={handleIncreasePage}>
+      <button disabled={currentPage >= 100} onClick={handleIncreasePage}>
         <CaretRight size={32} />
       </button>
     </PageControllerContainer>
