@@ -24,7 +24,7 @@ export function PageController() {
   }
 
   function handleIncreasePage() {
-    if (currentPage + 1 === availablePages.at(-1)) {
+    if (currentPage + 1 === availablePages.at(-1) && currentPage + 1 < 100) {
       setAvailablePages((state) => state.map((page) => page + 1))
     }
 
