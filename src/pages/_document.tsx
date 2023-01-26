@@ -3,7 +3,7 @@ import { getCssText } from '../styles'
 
 export default function Document() {
   return (
-    <Html>
+    <Html lang="en">
       <Head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
@@ -19,6 +19,11 @@ export default function Document() {
         <style
           id="stitches"
           dangerouslySetInnerHTML={{ __html: getCssText() }}
+        />
+        <meta property="og:title" content="Pokedex | André Chamis" />
+        <meta
+          name="description"
+          content="Procure por seus pokemons favoritos"
         />
       </Head>
       <body>

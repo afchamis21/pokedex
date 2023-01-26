@@ -33,7 +33,8 @@ model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model User {
@@ -61,7 +62,8 @@ model LikedPokemon {
   relationId String @id @default(cuid())
   pokemonId  Int
   userId     String
-  user       User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([pokemonId, userId])
 }
