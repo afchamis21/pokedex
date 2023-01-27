@@ -152,7 +152,7 @@ export default function Profile({
         />
         <meta
           name="description"
-          content="Venha ver os meus pokemon favoritos"
+          content="Come check my favorite pokemon!"
           key="profile-description"
         />
       </Head>

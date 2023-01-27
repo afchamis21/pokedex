@@ -27,7 +27,7 @@ export default function Document() {
         />
         <meta
           name="description"
-          content="Procure por seus pokemon favoritos ou descubra novos pokemon"
+          content="Look for your favorite pokemon and discover new ones!"
           key="document-description"
         />
       </Head>

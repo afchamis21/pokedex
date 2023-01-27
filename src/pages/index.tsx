@@ -14,7 +14,7 @@ export default function Home() {
           <meta property="og:title" content="Pokedex | Home" key="home-title" />
           <meta
             name="description"
-            content="Procure por seus pokemon favoritos ou descubra novos pokemon"
+            content="Look for your favorite pokemon and discover new ones!"
             key="home-description"
           />
         </Head>

@@ -27,7 +27,12 @@ export default function Login() {
     <LoginContainer>
       <Head>
         <title>Pokedex | Login</title>
-        <meta property="og:title" content="My page title" key="title" />
+        <meta property="og:title" content="Pokedex | Login" key="title" />
+        <meta
+          name="description"
+          content="Come login to Andre Chamis's pokedex"
+          key="login-description"
+        />
       </Head>
       <LoginMenu>
         {session ? (
