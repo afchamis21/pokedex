@@ -20,10 +20,15 @@ export default function Document() {
           id="stitches"
           dangerouslySetInnerHTML={{ __html: getCssText() }}
         />
-        <meta property="og:title" content="Pokedex | André Chamis" />
+        <meta
+          property="og:title"
+          content="Pokedex | André Chamis"
+          key="document"
+        />
         <meta
           name="description"
           content="Procure por seus pokemons favoritos"
+          key="document"
         />
       </Head>
       <body>

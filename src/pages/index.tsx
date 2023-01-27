@@ -11,10 +11,15 @@ export default function Home() {
       <HomeContainer>
         <Head>
           <title>Pokedex | Home</title>
-          <meta property="og:title" content="Pokedex | André Chamis" />
+          <meta
+            property="og:title"
+            content="Pokedex | André Chamis"
+            key="home"
+          />
           <meta
             name="description"
             content="Procure por seus pokemons favoritos"
+            key="home"
           />
         </Head>
         <PokemonSearchBar />
