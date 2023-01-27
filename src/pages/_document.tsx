@@ -22,13 +22,13 @@ export default function Document() {
         />
         <meta
           property="og:title"
-          content="Pokedex | André Chamis"
-          key="document"
+          content="Pokedex | Home"
+          key="document-title"
         />
         <meta
           name="description"
-          content="Procure por seus pokemons favoritos"
-          key="document"
+          content="Procure por seus pokemon favoritos ou descubra novos pokemon"
+          key="document-description"
         />
       </Head>
       <body>

@@ -140,8 +140,21 @@ export default function Profile({
   return (
     <ProfileContainer>
       <Head>
-        <title>Pokedex | Profile</title>
-        <meta property="og:title" content="My page title" key="title" />
+        <title>
+          Pokedex | {userInformation.name ? userInformation.name : 'Profile'}
+        </title>
+        <meta
+          property="og:title"
+          content={`Pokedex | ${
+            userInformation.name ? userInformation.name : 'Profile'
+          }`}
+          key="profile-title"
+        />
+        <meta
+          name="description"
+          content="Venha ver os meus pokemon favoritos"
+          key="profile-description"
+        />
       </Head>
       <SocialSectionContainer>
         <UserCard
