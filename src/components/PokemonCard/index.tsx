@@ -1,26 +1,15 @@
-import { useSession } from 'next-auth/react'
 import Image from 'next/image'
-import { useState } from 'react'
 import { Pokemon } from '../../context/PokemonContext'
-import { api } from '../../lib/axios'
-import { LikeButton } from '../LikeButton'
 import { PokemonCardContainer, PokemonInfo, TypeList } from './styles'
+import { ArrowSquareOut } from 'phosphor-react'
+import * as Dialog from '@radix-ui/react-dialog'
+import { PokemonModal } from '../PokemonModal'
 
 interface PokemonCardProps {
   pokemon: Pokemon
-  isPokemonAlreadyLiked: boolean
-  handleAddLikedPokemonList: (targetPokemonId: number) => void
-  handleRemoveLikedPokemonList: (targetPokemonId: number) => void
 }
 
-export function PokemonCard({
-  pokemon,
-  isPokemonAlreadyLiked,
-  handleAddLikedPokemonList,
-  handleRemoveLikedPokemonList,
-}: PokemonCardProps) {
-  const [isUpdating, setIsUpdating] = useState(false)
-  const { data: session } = useSession()
+export function PokemonCard({ pokemon }: PokemonCardProps) {
   const capitalize = (text: string) =>
     `${text.charAt(0).toUpperCase()}${text.slice(1)}`
 
@@ -29,43 +18,8 @@ export function PokemonCard({
     .map((name) => capitalize(name))
     .join(' ')
 
-  async function handleDislikePokemon() {
-    setIsUpdating(true)
-    try {
-      await api.delete('/api/pokemon/dislike', {
-        data: {
-          userId: session?.user?.id,
-          pokemonId: pokemon.id,
-        },
-      })
-      handleRemoveLikedPokemonList(pokemon.id)
-    } catch (error) {}
-    setIsUpdating(false)
-  }
-
-  async function handleLikePokemon() {
-    setIsUpdating(true)
-    try {
-      await api.post('/api/pokemon/like', {
-        data: {
-          userId: session?.user?.id,
-          pokemonId: pokemon.id,
-        },
-      })
-      handleAddLikedPokemonList(pokemon.id)
-    } catch (error) {}
-    setIsUpdating(false)
-  }
-
   return (
     <PokemonCardContainer>
-      <LikeButton
-        isLiked={isPokemonAlreadyLiked}
-        isUpdating={isUpdating}
-        handleClick={
-          isPokemonAlreadyLiked ? handleDislikePokemon : handleLikePokemon
-        }
-      />
       <Image src={pokemon.sprite} width={100} height={100} alt="" />
       <PokemonInfo>
         <p>
@@ -78,6 +32,12 @@ export function PokemonCard({
           <li key={i}>{capitalize(type)}</li>
         ))}
       </TypeList>
+      <Dialog.Root>
+        <Dialog.Trigger asChild>
+          <ArrowSquareOut size={24} />
+        </Dialog.Trigger>
+        <PokemonModal pokemonId={pokemon.id} />
+      </Dialog.Root>
     </PokemonCardContainer>
   )
 }

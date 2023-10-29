@@ -15,6 +15,12 @@ export const PokemonCardContainer = styled('div', {
     position: 'absolute',
     top: '16px',
     right: '16px',
+    transition: 'color 0.2s',
+    cursor: 'pointer',
+
+    '&:hover': {
+      color: '$red500',
+    },
   },
 })
 

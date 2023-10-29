@@ -61,17 +61,12 @@ export function PokemonContextProvider({
     )) as PokeAPI.Pokemon[]
 
     setPokemonList(
-      pokemons.map((pokemon) => {
-        const types = pokemon.types.map((type) => type.type.name)
-        const formattedPokemon = {
-          id: pokemon.id,
-          name: pokemon.name,
-          sprite: pokemon.sprites.front_default!,
-          types,
-        }
-
-        return formattedPokemon
-      }),
+      pokemons.map((pokemon) => ({
+        id: pokemon.id,
+        name: pokemon.name,
+        sprite: pokemon.sprites.front_default!,
+        types: pokemon.types.map((type) => type.type.name),
+      })),
     )
     setIsLoading(false)
   }
@@ -81,7 +76,7 @@ export function PokemonContextProvider({
     if (searchString.length === 0) {
       setCurrentPage(1)
       setAvailablePages([1, 2, 3, 4, 5])
-      fetchSpecificPage(1)
+      await fetchSpecificPage(1)
       return
     }
 
